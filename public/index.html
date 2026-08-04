@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DISPATCH — Task Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil:wght@600;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<header class="board-header">
+  <div class="board-header__left">
+    <span class="logo">DISPATCH</span>
+    <span class="logo-sub">task control board</span>
+  </div>
+  <div class="board-header__stats" id="stats">
+    <div class="stat"><span class="stat__value" id="stat-pending">0</span><span class="stat__label">pendentes</span></div>
+    <div class="stat"><span class="stat__value" id="stat-progress">0</span><span class="stat__label">em curso</span></div>
+    <div class="stat"><span class="stat__value" id="stat-done">0</span><span class="stat__label">concluídas</span></div>
+  </div>
+  <div class="board-header__right">
+    <span class="clock" id="clock">--:--:--</span>
+  </div>
+</header>
+
+<main class="board">
+
+  <aside class="rail">
+    <button class="btn-new" id="btn-new-toggle">
+      <span class="btn-new__plus">＋</span> NOVO TICKET
+    </button>
+
+    <div class="filter-group">
+      <span class="filter-group__label">FILTRAR STATUS</span>
+      <button class="chip chip--active" data-filter-status="">TODOS</button>
+      <button class="chip" data-filter-status="pending">PENDENTE</button>
+      <button class="chip" data-filter-status="in_progress">EM ANDAMENTO</button>
+      <button class="chip" data-filter-status="done">CONCLUÍDO</button>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-group__label">FILTRAR PRIORIDADE</span>
+      <button class="chip chip--active" data-filter-priority="">TODAS</button>
+      <button class="chip" data-filter-priority="high">ALTA</button>
+      <button class="chip" data-filter-priority="medium">MÉDIA</button>
+      <button class="chip" data-filter-priority="low">BAIXA</button>
+    </div>
+
+    <p class="rail-note">Clique no furo circular do ticket para avançar o status. Clique em VOID para remover.</p>
+  </aside>
+
+  <section class="deck">
+
+    <form id="new-ticket-form" class="ticket ticket--form" hidden>
+      <div class="ticket__perf" aria-hidden="true"></div>
+      <div class="ticket__body">
+        <label class="field">
+          <span class="field__label">TÍTULO *</span>
+          <input type="text" id="field-title" maxlength="150" required placeholder="Ex: Revisar pull request #42">
+        </label>
+        <label class="field">
+          <span class="field__label">DESCRIÇÃO</span>
+          <textarea id="field-description" rows="2" placeholder="Detalhes opcionais..."></textarea>
+        </label>
+        <div class="field-row">
+          <label class="field">
+            <span class="field__label">PRIORIDADE</span>
+            <select id="field-priority">
+              <option value="low">BAIXA</option>
+              <option value="medium" selected>MÉDIA</option>
+              <option value="high">ALTA</option>
+            </select>
+          </label>
+          <label class="field">
+            <span class="field__label">PRAZO</span>
+            <input type="date" id="field-due-date">
+          </label>
+        </div>
+        <div class="ticket__form-actions">
+          <button type="button" class="btn-ghost" id="btn-cancel-new">CANCELAR</button>
+          <button type="submit" class="btn-stamp">EMITIR TICKET</button>
+        </div>
+        <p class="form-error" id="form-error" hidden></p>
+      </div>
+    </form>
+
+    <div id="ticket-grid" class="ticket-grid"></div>
+
+    <div id="empty-state" class="empty-state" hidden>
+      <span class="empty-state__mark">—</span>
+      <p>Nenhum ticket na fila. Emita um novo para começar o turno.</p>
+    </div>
+
+  </section>
+
+</main>
+
+<template id="ticket-template">
+  <article class="ticket" data-id="">
+    <div class="ticket__perf" aria-hidden="true"></div>
+    <div class="ticket__body">
+      <div class="ticket__top">
+        <span class="ticket__number"></span>
+        <span class="ticket__stamp"></span>
+      </div>
+      <h3 class="ticket__title"></h3>
+      <p class="ticket__desc"></p>
+      <div class="ticket__meta">
+        <span class="ticket__due"></span>
+        <span class="ticket__created"></span>
+      </div>
+      <div class="ticket__footer">
+        <button class="punch" type="button" title="Avançar status">
+          <span class="punch__dot"></span>
+          <span class="punch__label"></span>
+        </button>
+        <button class="void-btn" type="button">VOID</button>
+      </div>
+    </div>
+  </article>
+</template>
+
+<script src="/app.js"></script>
+</body>
+</html>
